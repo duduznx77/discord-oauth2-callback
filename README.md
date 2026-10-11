@@ -1,46 +1,36 @@
-# Discord OAuth2 callback (consent-based)
+# OAuth2 Discord — pronto para Render
 
-This starter app provides a basic Discord OAuth2 login and callback. It only requests the `identify` scope, which verifies the identity of the person who explicitly clicks “Continuar com Discord”. It does not add users to a server or restore departed members.
+Este projeto oferece login OAuth2 com consentimento explícito e solicita somente o escopo `identify`. Ele identifica a conta que autorizou o login; não adiciona membros a servidores nem recupera membros automaticamente.
 
-## 1. Create a GitHub repository
+## Publicar no GitHub
 
-1. Sign in at https://github.com/new
-2. Create a **Public** repository named `discord-oauth2-callback`.
-3. Upload `package.json`, `server.js`, `.gitignore`, and this README to the repository root.
+1. Crie um repositório no GitHub.
+2. Envie os arquivos deste ZIP para a raiz do repositório: `server.js`, `package.json`, `.gitignore`, `.env.example` e `README.md`.
 
-## 2. Deploy on Render
+## Configuração no Render
 
-1. In Render, choose **New → Web Service**.
-2. Choose **Public Git Repository** and paste the URL of your GitHub repository.
-3. Runtime/language: Node.
-4. Build command: `npm install`
-5. Start command: `npm start`
-6. Create the service. Wait for Render to assign a URL such as `https://your-service.onrender.com`.
+Crie um Web Service a partir do repositório.
 
-## 3. Add environment variables in Render
+- Build Command: `npm install`
+- Start Command: `npm start`
 
-In the service's **Environment** tab, add:
+Depois que o Render gerar o domínio público, abra Environment e adicione:
 
-- `DISCORD_CLIENT_ID` = your application's Client ID
-- `DISCORD_CLIENT_SECRET` = the OAuth2 Client Secret from Discord Developer Portal (keep private)
-- `DISCORD_REDIRECT_URI` = `https://YOUR-SERVICE.onrender.com/api/auth/discord/callback` (replace with the exact Render hostname)
-- `SESSION_SECRET` = a long random secret, at least 32 characters
+- `DISCORD_CLIENT_SECRET` = Client Secret da aplicação no Discord Developer Portal
+- `DISCORD_REDIRECT_URI` = `https://SEU-SERVICO.onrender.com/api/auth/discord/callback`
 
-Save changes and redeploy.
+O `DISCORD_CLIENT_ID` já tem um valor padrão neste projeto, mas você pode defini-lo como variável também, se preferir.
 
-## 4. Configure Discord
+## Configuração no Discord
 
-Open https://discord.com/developers/applications/1558629910787006534/oauth2
+Abra https://discord.com/developers/applications/1558629910787006534/oauth2 e, em OAuth2 → Redirects, adicione exatamente a mesma URL informada em `DISCORD_REDIRECT_URI`. Salve.
 
-Under OAuth2 → Redirects, add the exact value of `DISCORD_REDIRECT_URI`, including `https://` and the full path. Save.
+## Teste
 
-## 5. Test
+Abra `https://SEU-SERVICO.onrender.com/` e clique em “Continuar com Discord”. O endereço do callback precisa corresponder exatamente nos dois painéis.
 
-Open `https://YOUR-SERVICE.onrender.com/` and click “Continuar com Discord”.
-The callback must match exactly in Render and Discord.
+## Segurança e limites
 
-## Notes
-
-- Never publish the Client Secret, bot token, access tokens, or SESSION_SECRET.
-- This starter stores OAuth state in process memory, so a service restart or multiple instances can interrupt a login; suitable only as a minimal starter, not a production session system.
-- It requests only `identify`. Adding a member to a server is a separate, explicit flow requiring the `guilds.join` scope, a bot installed in the target guild with the appropriate permissions, and the user's consent. Do not use this to add people without clear consent.
+- Nunca publique Client Secret, token do bot ou access tokens.
+- Este é um exemplo inicial. O estado OAuth fica em memória e pode expirar se o serviço reiniciar durante o login.
+- Para adicionar um usuário a um servidor, é necessário outro fluxo explícito, escopo apropriado e um bot configurado no servidor. Não use para adicionar pessoas sem consentimento.

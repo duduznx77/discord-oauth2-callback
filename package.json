@@ -1,8 +1,8 @@
 {
-  "name": "discord-oauth2-callback",
+  "name": "discord-oauth2-pronto",
   "version": "1.0.0",
   "private": true,
-  "description": "Consent-based Discord OAuth2 login callback",
+  "description": "Login OAuth2 do Discord com consentimento explícito",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
